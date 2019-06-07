@@ -6,24 +6,30 @@ FSJS project 2 - List Filter and Pagination
 // Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
 
 
-/*** 
-   Add your global variables that store the DOM elements you will 
-   need to reference and/or manipulate. 
-   
-   But be mindful of which variables should be global and which 
-   should be locally scoped to one of the two main functions you're 
-   going to create. A good general rule of thumb is if the variable 
-   will only be used inside of a function, then it can be locally 
-   scoped to that function.
-***/
-const li = document.getElementsByTagName('li');
+//two global variables, li contains all the li elements, where the students are defined
+//We want 10 items per page, so have the variable pageItems initialized to 10, 
+//if want to change it, we can easily do it by changing this value
+//CORRECTION, I had to change the way I get the li because if I do it by getElementsByTagName, the rest of the li (page numbers)
+// were hided too.
+const li = document.getElementsByClassName('student-item');
 const pageItems = 10;
 
+
+
+/*** 
+   showPage function displays a group of students and hides the rest of them
+   first parameter is the list of students, and the page number, this value will define which students we want to show
+   and which one we want to hide.
+   We loop all the list and if they are inside the range we want to display, we'll change 'display' property to
+   an empty string, if they are out of the range we'll change that property to 'none'. 
+   Then, we invoke the function so the first page (first ten students) will be displayed
+***/
 
 function showPage (li,pageNumber){
 
    const startIndex = (pageNumber * pageItems) - pageItems;
    const endIndex = pageNumber * pageItems;
+   
    for (let i=0; i< li.length ; i+=1){
       if (i>= startIndex && i<endIndex){
          li[i].style.display = '';
@@ -34,21 +40,6 @@ function showPage (li,pageNumber){
    }
 }
 showPage(li,1);
-/*** 
-   Create the `showPage` function to hide all of the items in the 
-   list except for the ten you want to show.
-
-   Pro Tips: 
-     - Keep in mind that with a list of 54 students, the last page 
-       will only display four.
-     - Remember that the first student has an index of 0.
-     - Remember that a function `parameter` goes in the parens when 
-       you initially define the function, and it acts as a variable 
-       or a placeholder to represent the actual function `argument` 
-       that will be passed into the parens later when you call or 
-       "invoke" the function 
-***/
-
 
 
 
@@ -56,9 +47,55 @@ showPage(li,1);
    Create the `appendPageLinks function` to generate, append, and add 
    functionality to the pagination buttons.
 ***/
+function appendPageLinks (li){
+   //building the page links at the end of the div with the class 'page'
+   //A div, and an ul inside of the div
+   const divPage = document.querySelector('.page')
+   const div = document.createElement('div');
+   const ul = document.createElement('ul');
+   div.className = 'pagination';
+   divPage.appendChild(div);
+   div.appendChild(ul);
+   //we want to add a list item inside the ul so wwe have to know how many of the we need.
+   linksNumber = (li.length/pageItems);
+   //console.log (linksNumber);
+   //we do a loop to build the exact number of li we need
+   for (let i=0; i<linksNumber; i++){
+      const l = document.createElement('li');
+      //inside of each li we create an a element with a href attribute and its page number as text.
+      const a = document.createElement('a');
+      //const href = document.createAttribute('href');
+      a.textContent = i+1;
+      ul.appendChild(l);
+      l.appendChild(a);
+      a.setAttribute('href','#');
+   }
+   ul.firstChild.firstChild.className='active';
+   
+   //we created an a list so we can add an eventListener to each a element.
+   const aList = document.getElementsByTagName('a');
+   //console.log(aList.length);
 
+   for (let i=0; i<aList.length; i++){
+      aList[i].addEventListener('click',(e) => {
+         const aSelected = e.target;
+         //a loop to remove the active link 
+         for (let j=0; j<aList.length; j++){
+            aList[j].className = '';
+         }
+         //it works like that, but I'm going to use event.target
+         //aList[i].className = 'active';
+         //showPage(li,aList[i].textContent);
 
+         aSelected.className = 'active';
+         //call the function showPage passing the global listItem and the page number
+         showPage(li,aSelected.textContent);
+      });
+   } 
 
+}
+
+appendPageLinks(li);
 
 
 // Remember to delete the comments that came with this file, and replace them with your own code comments.
