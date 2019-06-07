@@ -16,10 +16,24 @@ FSJS project 2 - List Filter and Pagination
    will only be used inside of a function, then it can be locally 
    scoped to that function.
 ***/
+const li = document.getElementsByTagName('li');
+const pageItems = 10;
 
 
+function showPage (li,pageNumber){
 
-
+   const startIndex = (pageNumber * pageItems) - pageItems;
+   const endIndex = pageNumber * pageItems;
+   for (let i=0; i< li.length ; i+=1){
+      if (i>= startIndex && i<endIndex){
+         li[i].style.display = '';
+      }else{
+         li[i].style.display = 'none';
+      }
+      //console.log(li[i]);
+   }
+}
+showPage(li,1);
 /*** 
    Create the `showPage` function to hide all of the items in the 
    list except for the ten you want to show.
