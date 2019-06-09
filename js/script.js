@@ -14,6 +14,17 @@ FSJS project 2 - List Filter and Pagination
 const li = document.getElementsByClassName('student-item');
 const pageItems = 10;
 
+//adding the search component
+const divHeader = document.querySelector('.page-header');
+const divSearch = document.createElement('div');
+divSearch.className = 'student-search';
+divHeader.appendChild(divSearch);
+const inputSearch = document.createElement('input');
+inputSearch.placeholder = 'Search for students...';
+const buttonSearch = document.createElement('button');
+buttonSearch.textContent = 'Search'
+divSearch.appendChild(inputSearch);
+divSearch.appendChild(buttonSearch);
 
 
 /*** 
@@ -97,5 +108,32 @@ function appendPageLinks (li){
 
 appendPageLinks(li);
 
+function showSearch(searchValue,li){
+   //console.log('input: '+searchValue);
+   //if nothing is written in the search input, the web will show its initial state
+   if (searchValue.length === 0){
+      showPage (li,1);
+   } else {
+      //looping the whole list looking for matches from our search
+      for (let i=0; i< li.length ; i+=1){
+         //get the name of the student, maybe there's an easier way...
+         const divDetail = li[i].querySelector('.student-details');
+         const name = divDetail.querySelector('h3');
+         //console.log(name.textContent+' '+searchValue);
+         if (name.textContent.includes(searchValue) ){
+            li[i].style.display =  '';
+         }else{
+            li[i].style.display = 'none';
+         }
+         
+      }
 
+   }
+
+}
+
+buttonSearch.addEventListener('click',(e)=>{
+   e.preventDefault();
+   showSearch(inputSearch.value,li);
+});
 // Remember to delete the comments that came with this file, and replace them with your own code comments.
