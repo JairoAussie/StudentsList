@@ -99,7 +99,11 @@ function appendPageLinks (li){
       l.appendChild(a);
       a.setAttribute('href','#');
    }
-   ul.firstChild.firstChild.className='active';
+   //there's an error in the console, this fixes it
+   if (linksNumber>0){
+      ul.firstChild.firstChild.className='active';
+   }
+   
    
    //we created an a list so we can add an eventListener to each a element.
    const aList = document.getElementsByTagName('a');
@@ -159,12 +163,13 @@ function showSearch(searchValue,li){
       //show the "no matches" text o don't 
       if (matches){
          noMatches.style.display = 'none';
+        
       } else{
          noMatches.style.display = '';
       }
-      //call both functions again but with the alternative list, only with the matches of the search
-      showPage(al,1);
-      appendPageLinks(al);
+       //call both functions again but with the alternative list, only with the matches of the search
+       showPage(al,1);
+       appendPageLinks(al);
    }
 
 }
