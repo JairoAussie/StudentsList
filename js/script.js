@@ -14,6 +14,18 @@ FSJS project 2 - List Filter and Pagination
 const li = document.getElementsByClassName('student-item');
 const pageItems = 10;
 
+ //building the page links at the end of the div with the class 'page'
+   //A div, and an ul inside of the div
+   //Needs to be global beacuse if I try to call appendPageLinks from the showSearch the pagination links duplicate.
+   const divPage = document.querySelector('.page')
+   const div = document.createElement('div');
+   div.className = 'pagination';
+   divPage.appendChild(div);
+   let ul = document.createElement('ul');
+   div.appendChild(ul);
+   
+   
+
 //adding the search component
 const divHeader = document.querySelector('.page-header');
 const divSearch = document.createElement('div');
@@ -59,18 +71,18 @@ showPage(li,1);
    functionality to the pagination buttons.
 ***/
 function appendPageLinks (li){
-   //building the page links at the end of the div with the class 'page'
-   //A div, and an ul inside of the div
-   const divPage = document.querySelector('.page')
-   const div = document.createElement('div');
-   const ul = document.createElement('ul');
-   div.className = 'pagination';
-   divPage.appendChild(div);
+   div.removeChild(ul);
+   ul = document.createElement('ul');
    div.appendChild(ul);
+   
    //we want to add a list item inside the ul so wwe have to know how many of the we need.
    linksNumber = (li.length/pageItems);
    //console.log (linksNumber);
+   for (let i=0; i<ul.length;i+=1){
+      ul.removeChild;
+   }
    //we do a loop to build the exact number of li we need
+
    for (let i=0; i<linksNumber; i++){
       const l = document.createElement('li');
       //inside of each li we create an a element with a href attribute and its page number as text.
@@ -109,25 +121,32 @@ function appendPageLinks (li){
 appendPageLinks(li);
 
 function showSearch(searchValue,li){
-   //console.log('input: '+searchValue);
+    
    //if nothing is written in the search input, the web will show its initial state
    if (searchValue.length === 0){
       showPage (li,1);
+      appendPageLinks(li);
    } else {
+      //create an alternative list, only the matches will be joined
+      let al = [];
       //looping the whole list looking for matches from our search
       for (let i=0; i< li.length ; i+=1){
+         
          //get the name of the student, maybe there's an easier way...
          const divDetail = li[i].querySelector('.student-details');
          const name = divDetail.querySelector('h3');
          //console.log(name.textContent+' '+searchValue);
-         if (name.textContent.includes(searchValue) ){
-            li[i].style.display =  '';
-         }else{
-            li[i].style.display = 'none';
+         if (name.textContent.toLowerCase().includes(searchValue.toLowerCase()) ){
+            //add the student to the alternative list
+            //console.log(li[i]);
+            al.push(li[i]);
+            
          }
-         
+         //hide all the original list
+         li[i].style.display =  'none';
       }
-
+      showPage(al,1);
+      appendPageLinks(al);
    }
 
 }
