@@ -155,4 +155,8 @@ buttonSearch.addEventListener('click',(e)=>{
    e.preventDefault();
    showSearch(inputSearch.value,li);
 });
+
+inputSearch.addEventListener('keyup',()=>{
+   showSearch(inputSearch.value,li);
+});
 // Remember to delete the comments that came with this file, and replace them with your own code comments.
