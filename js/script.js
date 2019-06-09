@@ -38,6 +38,12 @@ buttonSearch.textContent = 'Search'
 divSearch.appendChild(inputSearch);
 divSearch.appendChild(buttonSearch);
 
+//adding the "no matches" component
+const noMatches = document.createElement('h2');
+div.appendChild(noMatches);
+noMatches.textContent = 'No matches, sorry.'
+noMatches.style.display = 'none';
+
 
 /*** 
    showPage function displays a group of students and hides the rest of them
@@ -121,12 +127,15 @@ function appendPageLinks (li){
 appendPageLinks(li);
 
 function showSearch(searchValue,li){
-    
+   //variable to control if the search has matches or doesn't, and show the "no matches" text o don't
+    matches = false;
+    noMatches.style.display = 'none';
    //if nothing is written in the search input, the web will show its initial state
    if (searchValue.length === 0){
       showPage (li,1);
       appendPageLinks(li);
    } else {
+
       //create an alternative list, only the matches will be joined
       let al = [];
       //looping the whole list looking for matches from our search
@@ -140,17 +149,26 @@ function showSearch(searchValue,li){
             //add the student to the alternative list
             //console.log(li[i]);
             al.push(li[i]);
+
+            matches = true;
             
          }
          //hide all the original list
          li[i].style.display =  'none';
       }
+      //show the "no matches" text o don't 
+      if (matches){
+         noMatches.style.display = 'none';
+      } else{
+         noMatches.style.display = '';
+      }
+      //call both functions again but with the alternative list, only with the matches of the search
       showPage(al,1);
       appendPageLinks(al);
    }
 
 }
-
+//same actions, but different events
 buttonSearch.addEventListener('click',(e)=>{
    e.preventDefault();
    showSearch(inputSearch.value,li);
